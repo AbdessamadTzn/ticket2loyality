@@ -7,11 +7,16 @@ from schema.users import create_users_table
 from schema.tickets import create_tickets_table
 from schema.marques import create_marques_table
 from schema.articles import create_articles_table
+import logging
 
 # Load environment variables
 load_dotenv()
 
 def setup_database():
+    logging.basicConfig(
+    level=logging.INFO, 
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
     """Create tables and insert test data"""
     conn = psycopg2.connect(
         host=os.getenv("DB_HOST"),
@@ -20,6 +25,7 @@ def setup_database():
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD")
     )
+    
     
     cursor = conn.cursor()
     
@@ -69,7 +75,7 @@ def setup_database():
         
         # Commit changes
         conn.commit()
-        print("Database initialized successfully with test data!")
+        logging.info("Database initialized successfully with test data.")
         
     except Exception as e:
         conn.rollback()

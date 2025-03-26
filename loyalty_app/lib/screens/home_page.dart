@@ -1,89 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:loyalty_app/screens/brands_page.dart';
-import 'package:loyalty_app/screens/gains_page.dart';
-import 'package:loyalty_app/screens/receipts_page.dart';
-import 'package:loyalty_app/screens/login_page.dart'; // Importation de la page Login
-import 'package:loyalty_app/screens/register_page.dart'; // Importation de la page Register
+import 'brands_page.dart';
+import 'gains_page.dart';
+import 'receipts_page.dart';
+import 'profile_page.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  // Liste des pages associées aux onglets
+  final List<Widget> _pages = [
+    BrandsPage(), // Marques
+    GainsPage(), // Gains
+    ReceiptsScreen(), // Tickets
+    UserProfile(), // Profil
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Accueil'),
-        backgroundColor: Colors.deepPurple,
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'Bienvenue dans l\'application de fidélité!',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepPurple,
-                ),
-              ),
-              const SizedBox(height: 40), // Espacement entre le texte et les boutons
-              ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/brands'),
-                child: const Text('Voir les Marques'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple, // Couleur du bouton
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  textStyle: const TextStyle(fontSize: 18),
-                ),
-              ),
-              const SizedBox(height: 20), // Espacement entre les boutons
-              ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/gains'),
-                child: const Text('Voir mes Gains'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green, // Couleur du bouton
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  textStyle: const TextStyle(fontSize: 18),
-                ),
-              ),
-              const SizedBox(height: 20), // Espacement entre les boutons
-              ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/receipts'),
-                child: const Text('Voir mes Tickets'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, // Couleur du bouton
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  textStyle: const TextStyle(fontSize: 18),
-                ),
-              ),
-              const SizedBox(height: 40), // Espacement entre les boutons
-              ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/login'),
-                child: const Text('Connexion'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange, // Couleur du bouton de connexion
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  textStyle: const TextStyle(fontSize: 18),
-                ),
-              ),
-              const SizedBox(height: 20), // Espacement entre les boutons
-              ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/register'),
-                child: const Text('S\'inscrire'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.pink, // Couleur du bouton d'inscription
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  textStyle: const TextStyle(fontSize: 18),
-                ),
-              ),
-            ],
-          ),
+      body: _pages[_selectedIndex], // Affichage de la page sélectionnée
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.store),
+              color: _selectedIndex == 0 ? Colors.deepPurple : Colors.grey,
+              onPressed: () => _onItemTapped(0),
+            ),
+            IconButton(
+              icon: const Icon(Icons.emoji_events),
+              color: _selectedIndex == 1 ? Colors.deepPurple : Colors.grey,
+              onPressed: () => _onItemTapped(1),
+            ),
+            const SizedBox(width: 40), // Espace pour le bouton flottant
+            IconButton(
+              icon: const Icon(Icons.receipt_long),
+              color: _selectedIndex == 2 ? Colors.deepPurple : Colors.grey,
+              onPressed: () => _onItemTapped(2),
+            ),
+            IconButton(
+              icon: const Icon(Icons.person),
+              color: _selectedIndex == 3 ? Colors.deepPurple : Colors.grey,
+              onPressed: () => _onItemTapped(3),
+            ),
+          ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(context, '/scan'),
+        backgroundColor: Colors.deepPurple,
+        child: const Icon(Icons.qr_code_scanner, size: 30, color: Colors.white),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

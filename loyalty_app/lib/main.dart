@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screens/welcome_page.dart';
 import 'screens/home_page.dart';
 import 'screens/login_page.dart';
 import 'screens/register_page.dart';
@@ -7,15 +8,13 @@ import 'screens/brands_page.dart';
 import 'screens/gains_page.dart';
 import 'screens/receipts_page.dart';
 import 'screens/achat_page.dart';
-import 'screens/phone_screen.dart'; // Ajout de l'import pour le phone_screen
+import 'screens/scan_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,15 +23,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const PhoneScreen(), // Changez ici pour afficher le PhoneScreen en page principale
+      home: WelcomePage(), // Retirer 'const'
       routes: {
-        '/login': (context) => const LoginPage(),
-        '/register': (context) => const RegisterPage(),
-        '/profile': (context) => const ProfilePage(),
-        '/brands': (context) => const BrandsPage(),
-        '/gains': (context) => const GainsPage(),
-        '/receipts': (context) => const ReceiptsPage(),
-        '/achat': (context) => const AchatPage(),
+        '/home': (context) => HomePage(), // Retirer 'const'
+        '/login': (context) => LoginPage(), // Retirer 'const'
+        '/register': (context) => RegisterPage(), // Retirer 'const'
+        '/profile': (context) => UserProfile(), // Retirer 'const'
+        '/brands': (context) => BrandsPage(), // Retirer 'const'
+        '/gains': (context) => GainsPage(), // Retirer 'const'
+        '/receipts': (context) => ReceiptsScreen(), // Retirer 'const'
+        '/achat': (context) => AchatsPage(), // Retirer 'const'
+        '/scan': (context) => ScanPage(), // Retirer 'const'
       },
     );
   }

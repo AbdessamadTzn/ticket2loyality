@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from connection import execute_query
+from db.connection import execute_query  # clearly indicate the correct relative import
 from datetime import datetime
 
 def insert_ticket_data(ocr_data):

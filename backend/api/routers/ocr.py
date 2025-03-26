@@ -1,15 +1,24 @@
-from fastapi import Depends, UploadFile, File, HTTPException
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
+import numpy as np
+import cv2
+import paddleocr
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from auth.auth_handler import decode_token
+from ocr.mistral_ai import ia_function
 from db.insert_ocr_data import insert_ticket_data_user
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+router = APIRouter()
 
-@app.post("/ocr")
+security = HTTPBearer()
+
+ocr = paddleocr.PaddleOCR(use_angle_cls=True, lang="fr")
+
+@router.post("/ocr")
 async def extract_text(
     file: UploadFile = File(...),
-    token: str = Depends(oauth2_scheme)
+    credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
+    token = credentials.credentials
     user = decode_token(token)
     if not user:
         raise HTTPException(status_code=401, detail="Unauthorized")
@@ -31,7 +40,8 @@ async def extract_text(
     text = [line[1][0] for line in result[0]]
     ticket_info = ia_function("\n".join(text))
 
-    # Insert clearly with user_id
+    # MAKE SURE YOU CLEARLY USE THIS FUNCTION:
     insert_ticket_data_user(ticket_info, user_id)
 
     return {"msg": "OCR and DB insertion successful", "data": ticket_info}
+

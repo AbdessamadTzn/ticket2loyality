@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic
+python-dotenv
+psycopg2-binary
+requests
+paddleocr
+opencv-python
+numpy
+PyJWT

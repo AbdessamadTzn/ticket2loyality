@@ -17,13 +17,16 @@ def get_connection():
     return conn
 
 def execute_query(query, params=None):
-    """Execute a query and return results."""
+    """Execute a query and return results if it's a SELECT or contains RETURNING."""
     conn = get_connection()
     try:
         with conn.cursor() as cur:
             cur.execute(query, params)
-            if query.strip().upper().startswith(('SELECT', 'RETURNING')):
+            # Check if query is SELECT or contains RETURNING
+            query_upper = query.strip().upper()
+            if query_upper.startswith('SELECT') or 'RETURNING' in query_upper:
                 return cur.fetchall()
             conn.commit()
+            return None
     finally:
         conn.close()
